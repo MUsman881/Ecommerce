@@ -1,0 +1,199 @@
+﻿
+@{
+    ViewBag.Title = "Categoryview";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Categories</li>
+
+    </ol>
+    <!-- DataTables Example -->
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-table"></i>
+            Category Details
+            <button type="button" id="btnsave" class="btn btn-info pull-right fa fa-plus" data-toggle="modal" data-target="#exampleModal">
+                Add New
+            </button>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="categoryTable" class="display table table-bordered table-hover">
+                    <thead>
+                        <tr>
+
+                            <th style="width:5%">CategoryID</th>
+                            <th style="width:85%">Category Name</th>
+                            <th style="width:10%; text-align:right">Action</th>
+
+
+
+                        </tr>
+
+
+
+
+                    </thead>
+
+
+
+
+
+                </table>
+
+            </div>
+
+
+            <!--Insert Model pop Up -->
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    @using (Html.BeginForm("catin", "Admin", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+                    {
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+
+
+
+                                <div class="form-group ">
+                                    <input type="hidden" name="catid" id="catid" />
+
+                                </div>
+                                <div class="form-group ">
+
+                                    <input type="text" name="catname" id="catname" class="form-control" placeholder="Enter Category Name" required />
+
+                                </div>
+
+
+
+
+
+
+
+
+
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+            <!-- end Insert Model pop Up -->
+
+
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+@section  scripts{
+
+    <script>
+
+     var Popup, DataTable;
+     $(document).ready(function () {
+
+
+         DataTable = $("#categoryTable").DataTable({
+             "ajax":{
+                 "url": "/Admin/Getdata",
+                 "type": "GET",
+                 "datatype":"json"
+             },
+             "columns": [
+                    {"data": "catid"},
+                    {"data": "catname" },
+                    {"data": "catid", render: function (data) {
+                        return "<a class='btn btn-info btn-small bttt ' onclick = 'popupForm(this)'  ><i class='fa fa-pencil '></i> Edit </a> "
+
+                    },"orderable":false }
+             ]
+         });
+
+
+
+
+     });
+
+     function popupForm(e) {
+
+         var currentRow = $(e).closest("tr");
+
+         $("#catid").val(currentRow.find("td:eq(0)").html());
+         $("#catname").val(currentRow.find("td:eq(1)").html());
+
+         // alert(currentRow.find("td:eq(1)").html());
+
+         // alert(e);
+         $('#exampleModal').modal('toggle');
+
+
+
+     }
+
+     function SubmitForm(form) {
+
+         $.ajax({
+             type: "POST",
+             url: form.action,
+             data: $(form).serialize(),
+             success: function (data) {
+                 if (data.success) {
+
+                     $('#exampleModal').modal('toggle');
+                     DataTable.ajax.reload();
+                     $('#catname').val("");
+                     $('#catid').val("");
+                     $("btnsave").attr("disabled", true);
+                     $.notify(data.message, {
+                         globalPosition: "top center",
+                         className: "success"
+                     });
+
+
+                 }
+
+             }
+
+
+         });
+
+         return false;
+
+     }
+
+        //  $('#exampleModal').modal('toggle');
+
+    </script>
+}
+
+
+
+

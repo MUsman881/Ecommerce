@@ -1,0 +1,366 @@
+﻿
+@{
+    ViewBag.Title = "Saleview";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<style>
+    tbody > tr > :nth-child(7), tbody > tr > :nth-child(3) {
+        text-align: left;
+    }
+
+    tbody > tr > :nth-child(5), tbody > tr > :nth-child(6) {
+        text-align: right;
+    }
+</style>
+
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Sale Product</li>
+
+    </ol>
+    <!-- DataTables Example -->
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-table"></i>
+            Sale Product
+
+
+        </div>
+        <div class="card-body">
+
+            <div class="table-responsive">
+                <table id="salepro" class="display table table-bordered table-hover">
+                    <thead>
+                        <tr>
+
+                            <th style="width:5%"> ID</th>
+                            <th style="width:10%">Image</th>
+                            <th style="width:55%; text-align:left"> Name</th>
+                            <th style="width:15%; text-align:left"> Last_Date</th>
+                            <th style="width:15%; text-align:right">Action</th>
+
+
+
+                        </tr>
+
+
+
+
+                    </thead>
+
+
+
+
+
+                </table>
+
+            </div>
+
+
+
+
+            <hr />
+            <h2>Product List </h2>
+            <hr />
+
+            <div class="table-responsive">
+                <table id="ProTable" class="display table table-bordered table-hover">
+                    <thead>
+                        <tr>
+
+                            <th style="width:5%"> ID</th>
+                            <th style="width:10%">Image</th>
+                            <th style="width:25%; text-align:left"> Name</th>
+                            <th style="width:10%"> Category</th>
+                            <th style="width:5%"> Price</th>
+                            <th style="width:5%;text-align:right ">Stock</th>
+
+                            <th style="width:5%; text-align:right">Action</th>
+
+
+
+                        </tr>
+
+
+
+
+                    </thead>
+
+
+
+
+
+                </table>
+
+            </div>
+
+
+            <!--Insert Model pop Up -->
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    @using (Html.BeginForm("saleinhome", "Admin", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+            {
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add New Product</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+
+                                <div class="form-group ">
+                                    <input type="hidden" name="pid" id="pid" />
+
+                                </div>
+                                <div class="form-group ">
+
+                                    <input type="text" name="pname" id="pname" autocomplete="off" class="form-control" placeholder="Enter Product Name" required />
+
+                                </div>
+                                <div class="form-group ">
+
+                                    <input type="date" name="lastdate" id="lastdate" autocomplete="off" class="form-control" required />
+
+                                </div>
+
+
+
+
+
+
+
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+            <!-- end Insert Model pop Up -->
+
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+@section  scripts{
+    <script src="~/AdminStyle/vendor/jquery-editable-select.js"></script>
+    <script>
+     var Popup, DataTable;
+     $(document).ready(function () {
+
+         DataTable = $("#ProTable").DataTable({
+             "ajax": {
+                 "url": "/Admin/Getprotab",
+                 "type": "GET",
+                 "datatype": "json"
+             },
+             "columns": [
+                    { "data": "pid" },
+
+                 {
+                     "data": "picone", render: function (data) {
+                         return "<img  src="+data+"  height='100px' width='100px' />"
+
+                     }
+                 },
+
+
+                      { "data": "pname" },
+                    { "data": "catname" },
+                       { "data": "price" },
+                        { "data": "stock" },
+
+                    {
+                        "data": "pid", render: function (data) {
+                            return "<a class='btn btn-info btn-small' onclick = 'popupForm(this," + data + ")'  ><i class='fa fa-pencil '></i> Add </a> "
+
+                        }, "orderable": false
+                    }
+             ]
+         });
+
+
+
+
+
+         DataTable = $("#salepro").DataTable({
+             "ajax": {
+                 "url": "/Admin/GetdataSale",
+                 "type": "GET",
+                 "datatype": "json"
+             },
+             "columns": [
+                    { "data": "pid" },
+
+                 {
+                     "data": "picone", render: function (data) {
+                         return "<img  src=" + data + "  height='100px' width='100px' />"
+
+                     }
+                 },
+
+
+                      { "data": "pname" },
+                        {
+                            "data": "lastdate", render: function (data) {
+                                var aa = new Date(parseInt(data.replace('/Date(', '')));
+
+                                return aa.toDateString();
+
+                            }
+
+
+                        },
+
+                    {
+                        "data": "pid", render: function (data) {
+                                return "<a class='btn btn-info btn-small' onclick = 'popdel(this, " + data + ")'  ><i class='fa fa-pencil '></i> Remove </a> "
+
+                        }, "orderable": false
+                    }
+             ]
+         });
+
+
+
+
+
+
+
+
+
+     //
+
+
+
+
+     });
+     function popupForm(e) {
+
+         var currentRow = $(e).closest("tr");
+
+         $("#pid").val(currentRow.find("td:eq(0)").html());
+         $("#pname").val(currentRow.find("td:eq(2)").html());
+
+
+         $('#exampleModal').modal('toggle');
+
+
+
+     }
+
+
+
+
+     function SubmitForm(form) {
+
+         $.ajax({
+             type: "POST",
+             url: form.action,
+             data: $(form).serialize(),
+             success: function (data) {
+                 if (data.success) {
+
+                     $('#exampleModal').modal('toggle');
+                     DataTable.ajax.reload();
+                     $('#pname').val("");
+                     $('#lastdate').val("");
+                     $('#pid').val("");
+                     $("btnsave").attr("disabled", true);
+                     $.notify(data.message, {
+                         globalPosition: "top center",
+                         className: "success"
+                     });
+
+
+                 }
+
+             }
+
+
+         });
+
+         return false;
+
+     } //  $('#exampleModal').modal('toggle');
+
+
+
+     function popdel(e) {
+
+         var currentRow = $(e).closest("tr");
+
+         var pid = currentRow.find("td:eq(0)").html();
+
+
+         $.ajax({
+                 type: "POST",
+                 url: "/admin/removesale",
+                 data: { Proid: pid },
+                 success: function (data) {
+                     if (data.success) {
+
+
+                         $.notify(data.message, {
+                             globalPosition: "top center",
+                             className: "success"
+
+                         });
+                         DataTable.ajax.reload();
+                         $(e).closest("tr").remove().draw();
+
+
+
+                 }
+
+             }
+
+
+         });
+
+         return false;
+
+
+         // alert(pid);
+
+
+
+
+     }
+
+
+
+
+    </script>
+
+
+
+
+}
+
+
+
+
+

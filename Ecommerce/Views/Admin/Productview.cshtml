@@ -1,0 +1,257 @@
+﻿
+@{
+    ViewBag.Title = "Productview";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<style>
+    tbody > tr > :nth-child(7), tbody > tr > :nth-child(3) {
+        text-align: left;
+    }
+
+    tbody > tr > :nth-child(5), tbody > tr > :nth-child(6) {
+        text-align: right;
+    }
+</style>
+
+
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Products</li>
+
+    </ol>
+
+    
+    <!--datatables-->
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-table"></i>
+            Product Details
+            <button type="button" id="btnsave" class="btn btn-info pull-right fa fa-plus" data-toggle="modal" data-target="#exampleModal">
+                Add New
+            </button>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="ProTable" class="display table table-bordered table-hover">
+                    <thead>
+                        <tr>
+
+                            <th style="width:5%"> ID</th>
+                            <th style="width:10%">Image</th>
+                            <th style="width:25%; text-align:left">Name</th>
+                            <th style="width:10%"> Category</th>
+                            <th style="width:5%"> Price</th>
+                            <th style="width:5%;text-align:right ">Stock</th>
+                            <th style="width:35%; text-align:left">Description </th>
+                            <th style="width:5%; text-align:right">Action</th>
+
+                        </tr>
+
+
+                    </thead>
+
+
+                </table>
+
+            </div>
+
+
+            <!--Insert Model pop Up -->
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    @using (Html.BeginForm("proin", "Admin", FormMethod.Post, new { onsubmit = "return SubmitForm(this)", enctype = "multipart/form-data" }))
+                    {
+
+                        @Html.AntiForgeryToken()
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add New Product</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+
+                                <div class="form-group ">
+                                    <input type="hidden" name="pid" id="pid" />
+
+                                </div>
+                                <div class="form-group ">
+
+                                    <input type="text" name="pname" id="pname" autocomplete="off" class="form-control" placeholder="Enter Product Name" required />
+
+                                </div>
+                                <div class="form-group ">
+                                    <input type="hidden" id="catid" name="catid" />
+                                    <select id="catidd" name="catidd" autocomplete="off" class="form-control">
+                                        <option value="0">Select Category</option>
+
+
+                                    </select>
+
+                                </div>
+                                <div class="form-group ">
+
+                                    <input type="text" name="price" id="price" autocomplete="off" class="form-control" placeholder="Enter Product Price" required />
+
+                                </div>
+                                <div class="form-group ">
+                                    <input type="hidden" name="stock" id="stock" value="0" />
+
+                                </div>
+
+                                <div class="form-group ">
+                                    <input type="file" id="imgpath" name="imgpath" class="form-control" />
+
+                                </div>
+                                <div class="form-group ">
+                                    <input type="file" id="imgpathdes" name="imgpathdes" class="form-control" />
+
+                                </div>
+                                <div class="form-group ">
+
+
+                                    <textarea rows="5" cols="30" name="pdes" id="pdes" autocomplete="off" class="form-control" placeholder="Enter Product Description " required></textarea>
+
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+            <!-- end Insert Model pop Up -->
+
+
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+
+@section scripts{
+    <script src="~/AdminStyle/vendor/jquery-editable-select.js"></script>
+    <script>
+
+        var Popup, DataTable;
+
+        $(document).ready(function () {
+
+            DataTable = $("#ProTable").DataTable({
+                "ajax": {
+                    "url": "/admin/Getproductdata",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "pid" },
+                    {
+                        "data": "picone", render: function (data) {
+                            return "<img src =" + data +" height='100px' width='100px' />"
+                        }
+                    },
+
+                    { "data": "pname" },
+                    { "data": "catname" },
+                    { "data": "price" },
+                    { "data": "stock" },
+                    { "data": "pdes" },
+                    {
+                        "data": "pid", render: function (data) {
+                            return "<a class='btn btn-info btn-small' onclick='popupForm(this, " + data + ")'> <i class='fa fa-pencil'></i> Edit </a>"
+                        }, "orderable":false
+                    }
+
+                ]
+            });
+
+
+            $.ajax({
+
+                url: "/Admin/Getcatdata",
+                type: "Get",
+                contentType: "application/json; charset = utf-8",
+                datatype: JSON,
+                success: function (result) {
+                    $(result).each(function () {
+
+                        $("#catidd").append($("<option></option>").val(this.catid).html(this.catname));
+
+                        });
+
+                    $('#catidd').editableSelect().on('Select.editable-Select', function (e, li) {
+
+                        $('#catid').val(li.val());
+                    });
+
+
+                },
+                error: function(data){ }
+                
+            });
+
+
+        });
+
+
+        
+
+
+
+        function SubmitForm(form) {
+            $.ajax({
+
+                type: "POST",
+                url: form.action,
+                data: form.serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        $('#exampleModal').modal('toggle');
+                        $('#pname').val("");
+                        $('#pid').val("");
+                        $('#price').val("");
+                        $('#stock').val("");
+                        $('#pdes').val("");
+
+                        $("btnsave").attr("disabled", true);
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        });
+                    }
+                }
+                
+            });
+            return false;
+        }
+
+
+
+    </script>
+    
+    
+    }
