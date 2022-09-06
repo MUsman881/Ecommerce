@@ -1,0 +1,43 @@
+﻿@model Ecommerce.Models.User
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Login.css" rel="stylesheet" />
+
+<div class="login">
+    <div class="account-login">
+        <h1 class="text-center">Account Login</h1>
+        <br />
+        @using (Html.BeginForm())
+        {
+            <form class="" action="" method="post">
+
+                <div class="form-group">
+                    @*<input type="text" placeholder="User Name" class="form-control">*@
+                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "User Name" })
+                    <span style="color:red">@Html.ValidationMessageFor(x => x.Email)</span>
+
+                </div>
+                <div class="form-group">
+                    @*<input type="password" placeholder="Password" class="form-control">*@
+                    @Html.PasswordFor(x => x.Password, new { @class = "form-control", @placeholder = "Password" })
+                    <span style="color:red">@Html.ValidationMessageFor(x => x.Password)</span>
+
+                </div>
+
+                <input type="submit" class="btn" value="Login">
+
+                <p>Are you new?<a href="@Url.Action("Register", "Shop")">Sign Up</a></p>
+
+                <div class="form-group">
+                    <p style="color:red">@ViewBag.error</p>
+                </div>
+
+            </form>
+        }
+
+
+    </div>
+</div>

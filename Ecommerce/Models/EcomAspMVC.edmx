@@ -12,6 +12,16 @@
           <Property Name="admin_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="admin_name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="admin_pass" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="admin_email" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartID" />
+          </Key>
+          <Property Name="CartID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="pid" Type="int" Nullable="false" />
+          <Property Name="Qty" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -27,16 +37,11 @@
           <Property Name="fid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="pid" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="orderdetail">
           <Key>
-            <PropertyRef Name="OrderID" />
-            <PropertyRef Name="pid" />
-            <PropertyRef Name="qty" />
-            <PropertyRef Name="price" />
-            <PropertyRef Name="Bill" />
+            <PropertyRef Name="ID" />
           </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OrderID" Type="int" Nullable="false" />
           <Property Name="pid" Type="int" Nullable="false" />
           <Property Name="qty" Type="int" Nullable="false" />
@@ -54,6 +59,7 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
           <Property Name="CustomerPhone" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="CustomerAddress" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CustomerCity" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -86,6 +92,42 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Cart_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="pid" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="pid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_featureproduct_Product">
           <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
           <End Role="featureproduct" Type="Self.featureproduct" Multiplicity="*" />
@@ -148,21 +190,23 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
         </Association>
         <EntityContainer Name="EcomAspMVCModelStoreContainer">
           <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="featureproduct" EntityType="Self.featureproduct" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="orderdetail" EntityType="Self.orderdetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ordermain" EntityType="Self.ordermain" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="saleproduct" EntityType="Self.saleproduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="orderdetail" EntityType="Self.orderdetail" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [orderdetail].[OrderID] AS [OrderID], 
-    [orderdetail].[pid] AS [pid], 
-    [orderdetail].[qty] AS [qty], 
-    [orderdetail].[price] AS [price], 
-    [orderdetail].[Bill] AS [Bill]
-    FROM [dbo].[orderdetail] AS [orderdetail]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Cart_Product" Association="Self.FK_Cart_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Users" Association="Self.FK_Cart_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
           <AssociationSet Name="FK_featureproduct_Product" Association="Self.FK_featureproduct_Product">
             <End Role="Product" EntitySet="Product" />
             <End Role="featureproduct" EntitySet="featureproduct" />
@@ -195,6 +239,18 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
           <Property Name="admin_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="admin_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="admin_pass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="admin_email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartID" />
+          </Key>
+          <Property Name="CartID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="pid" Type="Int32" Nullable="false" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Cart_Product" FromRole="Cart" ToRole="Product" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Cart_Users" FromRole="Cart" ToRole="Users" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -212,6 +268,19 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
           <Property Name="pid" Type="Int32" />
           <NavigationProperty Name="Product" Relationship="Self.FK_featureproduct_Product" FromRole="featureproduct" ToRole="Product" />
         </EntityType>
+        <EntityType Name="orderdetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="pid" Type="Int32" Nullable="false" />
+          <Property Name="qty" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
+          <Property Name="Bill" Type="Double" Nullable="false" />
+          <NavigationProperty Name="ordermain" Relationship="Self.FK_orderdetail_ordermain" FromRole="orderdetail" ToRole="ordermain" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_orderdetail_Product" FromRole="orderdetail" ToRole="Product" />
+        </EntityType>
         <EntityType Name="ordermain">
           <Key>
             <PropertyRef Name="OrderID" />
@@ -223,6 +292,7 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
           <Property Name="CustomerPhone" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CustomerAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CustomerCity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="orderdetails" Relationship="Self.FK_orderdetail_ordermain" FromRole="ordermain" ToRole="orderdetail" />
         </EntityType>
         <EntityType Name="Product">
@@ -237,6 +307,7 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
           <Property Name="picone" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="pictwo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="stock" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Carts" Relationship="Self.FK_Cart_Product" FromRole="Product" ToRole="Cart" />
           <NavigationProperty Name="Category" Relationship="Self.FK_Product_Category" FromRole="Product" ToRole="Category" />
           <NavigationProperty Name="featureproducts" Relationship="Self.FK_featureproduct_Product" FromRole="Product" ToRole="featureproduct" />
           <NavigationProperty Name="orderdetails" Relationship="Self.FK_orderdetail_Product" FromRole="Product" ToRole="orderdetail" />
@@ -261,22 +332,43 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <EntityType Name="orderdetail">
+        <EntityType Name="User">
           <Key>
-            <PropertyRef Name="OrderID" />
-            <PropertyRef Name="pid" />
-            <PropertyRef Name="qty" />
-            <PropertyRef Name="price" />
-            <PropertyRef Name="Bill" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="OrderID" Type="Int32" Nullable="false" />
-          <Property Name="pid" Type="Int32" Nullable="false" />
-          <Property Name="qty" Type="Int32" Nullable="false" />
-          <Property Name="price" Type="Double" Nullable="false" />
-          <NavigationProperty Name="ordermain" Relationship="Self.FK_orderdetail_ordermain" FromRole="orderdetail" ToRole="ordermain" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_orderdetail_Product" FromRole="orderdetail" ToRole="Product" />
-          <Property Name="Bill" Type="Double" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Carts" Relationship="Self.FK_Cart_Users" FromRole="Users" ToRole="Cart" />
         </EntityType>
+        <Association Name="FK_Cart_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="pid" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="pid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Product_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
@@ -337,15 +429,25 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="EcomAspMVCEntitie" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="EcomAspMVCEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="admins" EntityType="Self.admin" />
+          <EntitySet Name="Carts" EntityType="Self.Cart" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="featureproducts" EntityType="Self.featureproduct" />
+          <EntitySet Name="orderdetails" EntityType="Self.orderdetail" />
           <EntitySet Name="ordermains" EntityType="Self.ordermain" />
           <EntitySet Name="Products" EntityType="Self.Product" />
           <EntitySet Name="saleproducts" EntityType="Self.saleproduct" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
-          <EntitySet Name="orderdetails" EntityType="Self.orderdetail" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Cart_Product" Association="Self.FK_Cart_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Cart" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Users" Association="Self.FK_Cart_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Cart" EntitySet="Carts" />
+          </AssociationSet>
           <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
             <End Role="Category" EntitySet="Categories" />
             <End Role="Product" EntitySet="Products" />
@@ -372,13 +474,24 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="EcomAspMVCModelStoreContainer" CdmEntityContainer="EcomAspMVCEntitie">
+        <EntityContainerMapping StorageEntityContainer="EcomAspMVCModelStoreContainer" CdmEntityContainer="EcomAspMVCEntities">
           <EntitySetMapping Name="admins">
             <EntityTypeMapping TypeName="EcomAspMVCModel.admin">
               <MappingFragment StoreEntitySet="admin">
+                <ScalarProperty Name="admin_email" ColumnName="admin_email" />
                 <ScalarProperty Name="admin_id" ColumnName="admin_id" />
                 <ScalarProperty Name="admin_name" ColumnName="admin_name" />
                 <ScalarProperty Name="admin_pass" ColumnName="admin_pass" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Carts">
+            <EntityTypeMapping TypeName="EcomAspMVCModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="CartID" ColumnName="CartID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="pid" ColumnName="pid" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -398,6 +511,18 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="orderdetails">
+            <EntityTypeMapping TypeName="EcomAspMVCModel.orderdetail">
+              <MappingFragment StoreEntitySet="orderdetail">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="pid" ColumnName="pid" />
+                <ScalarProperty Name="qty" ColumnName="qty" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="Bill" ColumnName="Bill" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ordermains">
             <EntityTypeMapping TypeName="EcomAspMVCModel.ordermain">
               <MappingFragment StoreEntitySet="ordermain">
@@ -408,6 +533,7 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
                 <ScalarProperty Name="CustomerPhone" ColumnName="CustomerPhone" />
                 <ScalarProperty Name="CustomerAddress" ColumnName="CustomerAddress" />
                 <ScalarProperty Name="CustomerCity" ColumnName="CustomerCity" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -445,14 +571,16 @@ warning 6002: The table/view 'EcomAspMVC.dbo.orderdetail' does not have a primar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="orderdetails">
-            <EntityTypeMapping TypeName="EcomAspMVCModel.orderdetail">
-              <MappingFragment StoreEntitySet="orderdetail">
-                <ScalarProperty Name="Bill" ColumnName="Bill" />
-                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-                <ScalarProperty Name="pid" ColumnName="pid" />
-                <ScalarProperty Name="qty" ColumnName="qty" />
-                <ScalarProperty Name="price" ColumnName="price" />
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="EcomAspMVCModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

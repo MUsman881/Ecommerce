@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="fbea7bc1cd2b4637942b9692ab4f84e8" Name="Diagram1">
+        <EntityTypeShape EntityType="EcomAspMVCModel.admin" Width="1.5" PointX="6.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="EcomAspMVCModel.Cart" Width="1.5" PointX="4.125" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="EcomAspMVCModel.Category" Width="1.5" PointX="1.125" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EcomAspMVCModel.featureproduct" Width="1.5" PointX="3.625" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EcomAspMVCModel.orderdetail" Width="1.5" PointX="6.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="EcomAspMVCModel.ordermain" Width="1.5" PointX="4" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="EcomAspMVCModel.Product" Width="1.5" PointX="1.125" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="EcomAspMVCModel.saleproduct" Width="1.5" PointX="5.25" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="EcomAspMVCModel.sysdiagram" Width="1.5" PointX="6.125" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="EcomAspMVCModel.User" Width="1.5" PointX="0.5" PointY="1.5" IsExpanded="true" />
+        <AssociationConnector Association="EcomAspMVCModel.FK_Cart_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="EcomAspMVCModel.FK_Cart_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="EcomAspMVCModel.FK_Product_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="EcomAspMVCModel.FK_featureproduct_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="EcomAspMVCModel.FK_orderdetail_ordermain" ManuallyRouted="false" />
+        <AssociationConnector Association="EcomAspMVCModel.FK_orderdetail_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="EcomAspMVCModel.FK_saleproduct_Product" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

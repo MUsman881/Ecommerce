@@ -4,12 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Ecommerce.Models;
+using System.Web.Security;
 
 namespace Ecommerce.Controllers
 {
     public class HomeController : Controller
     {
-        EcomAspMVCEntitie obj = new EcomAspMVCEntitie();
+        EcomAspMVCEntities obj = new EcomAspMVCEntities();
 
         public ActionResult fdatahome()
         {
@@ -43,8 +44,52 @@ namespace Ecommerce.Controllers
             return View();
         }
 
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            Session.Clear();
+            Session.RemoveAll();
+            Session.Abandon();
+            return RedirectToAction("Login");
+        }
         
+        #region login
+        public ActionResult Login()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public ActionResult Login(User user)
+        {
+            User us = obj.Users.Where(u => u.Email == user.Email && u.Password == user.Password).SingleOrDefault();
+
+            if (us != null)
+            {
+                Session["ID"] = us.ID.ToString();
+                Session["userName"] = us.Name.ToString();
+                Session["userPass"] = us.Password.ToString();
+                ViewBag.username = Session["username"];
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ViewBag.error = "Invalid Username or Password!";
+
+            }
+            return View();
+        }
+        #endregion
+
+        public ActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Register(User register)
+        {
+            return View();
+        }
 
     }
 }

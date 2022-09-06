@@ -14,6 +14,7 @@ namespace Ecommerce.Models
     
     public partial class orderdetail
     {
+        public int ID { get; set; }
         public int OrderID { get; set; }
         public int pid { get; set; }
         public int qty { get; set; }

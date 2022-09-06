@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model Ecommerce.Models.ViewCart
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -8,19 +9,16 @@
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
+    <link href="~/Content/animate.css" rel="stylesheet" />
+    <link href="~/Content/aos.css" rel="stylesheet" />
+
     <!-- Bootstrap -->
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- Slick -->
-    <link href="~/Content/slick.css" rel="stylesheet" />
-    <link href="~/Content/slick-theme.css" rel="stylesheet" />
-
-    <!-- nouislider -->
     <link href="~/Content/nouislider.min.css" rel="stylesheet" />
-
     <!-- Font Awesome Icon -->
-    <link href="~/Content/all.min.css" rel="stylesheet" />  
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/AdminStyle/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
 
     <!-- Custom stlylesheet -->
     <link href="~/Content/style.css" rel="stylesheet" />
@@ -40,8 +38,16 @@
                     <li><a href="#"><i class="fa fa-map-marker"></i>  Madina Center</a></li>
                 </ul>
                 <ul class="header-links pull-right">
-                    <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-                    <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
+
+                    @if (Session["ID"] == null)
+                    {
+                        <li><a href="@Url.Action("Login", "Home")"><i class="fa fa-user-o"></i> Sign in</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="@Url.Action("Logout", "Home")"><i class="fa fa-user-o"></i>Log out</a></li>
+                    }
+
                 </ul>
             </div>
         </div>
@@ -90,8 +96,8 @@
                             <!-- /Wishlist -->
                             <!-- Cart -->
                             <div>
-                                <a style="cursor:pointer;">
-                                    <i class="fa fa-shopping-cart my-cart-icon"><span class="badge badge-notify my-cart-badge">0</span></i>
+                                <a href="@Url.Action("Cart", "Shop")">
+                                    <i class="fa fa-shopping-cart my-cart-icon"><span class="badge badge-notify my-cart-badge"></span></i>
                                     <span>Your Cart</span>
                                 </a>
 
@@ -164,9 +170,6 @@
                     <li><a href="#">Track Orders</a></li>
                 </ul>
 
-                <ul class="main-nav nav navbar-nav navbar-right">
-                    <li><a href="/Admin/Login/">Login</a></li>
-                </ul>
                 <!-- /NAV -->
             </div>
             <!-- /responsive-nav -->
@@ -311,12 +314,15 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/nouislider.min.js"></script>
     <script src="~/Scripts/jquery.cookie.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/jquery.mycart.js"></script>
-    <script src="~/Scripts/slick.min.js"></script>
-    <script src="~/Scripts/nouislider.min.js"></script>
+    <script src="~/AdminStyle/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="~/AdminStyle/vendor/datatables/dataTables.bootstrap4.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.19/api/sum().js"></script>
     <script src="~/Scripts/jquery.zoom.min.js"></script>
+    <script src="~/Scripts/notify.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>    
     <script src="~/Scripts/main.js"></script>
     @RenderSection("scripts", required: false)
 

@@ -13,10 +13,10 @@ namespace Ecommerce.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class EcomAspMVCEntitie : DbContext
+    public partial class EcomAspMVCEntities : DbContext
     {
-        public EcomAspMVCEntitie()
-            : base("name=EcomAspMVCEntitie")
+        public EcomAspMVCEntities()
+            : base("name=EcomAspMVCEntities")
         {
         }
     
@@ -26,12 +26,14 @@ namespace Ecommerce.Models
         }
     
         public virtual DbSet<admin> admins { get; set; }
+        public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<featureproduct> featureproducts { get; set; }
+        public virtual DbSet<orderdetail> orderdetails { get; set; }
         public virtual DbSet<ordermain> ordermains { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<saleproduct> saleproducts { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<orderdetail> orderdetails { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

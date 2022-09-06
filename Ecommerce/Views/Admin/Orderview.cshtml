@@ -4,5 +4,98 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Orderview</h2>
+
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Orders</li>
+    </ol>
+
+    <!--datatables-->
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-table"></i>
+            Orders
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="orderTable" class="display table table-bordered table-hover">
+                    <thead>
+                        <tr>
+
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Action</th>
+
+                        </tr>
+
+
+                    </thead>
+
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+@section scripts
+ {
+    <script src="~/AdminStyle/vendor/jquery-editable-select.js"></script>
+
+    <script>
+
+        var Popup, DataTable;
+
+        $(document).ready(function () {
+
+            DataTable = $("#orderTable").DataTable({
+                "ajax": {
+                    "url": "/admin/viewOrders",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "OrderID" },
+                    {
+                        "data": "OrderDate", render: function (data) {
+                            var aa = new Date(parseInt(data.replace('/Date(', '')));
+                            return aa.toDateString();
+                        }
+                    },
+
+                    { "data": "Status" },
+                    { "data": "CustomerName" },
+                    { "data": "CustomerPhone" },
+                    {
+                        "data": "OrderID", render: function (data) {
+                            return "<a class='btn btn-info btn-small' style='color:#fff' href='OrderDetail?OrderID=" + data + "'>View Detail</a>"
+                        }, "orderable": false
+                    }
+                ]
+            });
+
+
+        });
+
+
+    </script>
+
+
+}
+
+
+
 

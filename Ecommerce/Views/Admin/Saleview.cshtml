@@ -236,25 +236,12 @@
 
                     {
                         "data": "pid", render: function (data) {
-                                return "<a class='btn btn-info btn-small' onclick = 'popdel(this, " + data + ")'  ><i class='fa fa-pencil '></i> Remove </a> "
+                                return "<a class='btn btn-info btn-small' onclick = 'popdel(this, " + data + ")'><i class='fa fa-remove '></i> Remove </a> "
 
                         }, "orderable": false
                     }
              ]
          });
-
-
-
-
-
-
-
-
-
-     //
-
-
-
 
      });
      function popupForm(e) {
@@ -322,7 +309,6 @@
                  success: function (data) {
                      if (data.success) {
 
-
                          $.notify(data.message, {
                              globalPosition: "top center",
                              className: "success"
@@ -330,24 +316,11 @@
                          });
                          DataTable.ajax.reload();
                          $(e).closest("tr").remove().draw();
-
-
-
                  }
-
              }
-
-
          });
 
          return false;
-
-
-         // alert(pid);
-
-
-
-
      }
 
 

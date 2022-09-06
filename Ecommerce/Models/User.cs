@@ -12,24 +12,23 @@ namespace Ecommerce.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ordermain
+    public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ordermain()
+        public User()
         {
-            this.orderdetails = new HashSet<orderdetail>();
+            this.Carts = new HashSet<Cart>();
         }
     
-        public int OrderID { get; set; }
-        public System.DateTime OrderDate { get; set; }
-        public string Status { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerPhone { get; set; }
-        public string CustomerAddress { get; set; }
-        public string CustomerCity { get; set; }
-        public string EmailAddress { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string Mobile { get; set; }
+        public string Address { get; set; }
+        public string City { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<orderdetail> orderdetails { get; set; }
+        public virtual ICollection<Cart> Carts { get; set; }
     }
 }

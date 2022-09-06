@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,13 +6,14 @@ using System.Web.Mvc;
 using Ecommerce.Models;
 using System.IO;
 using System.Data;
+using System.Web.Security;
+using System.Data.Entity;
 
 namespace Ecommerce.Controllers
 {
     public class AdminController : Controller
     {
-        // GET: Admin
-        EcomAspMVCEntitie obj = new EcomAspMVCEntitie();
+        EcomAspMVCEntities obj = new EcomAspMVCEntities();
 
         //get category id and name from database
         public JsonResult GetData()
@@ -48,7 +49,7 @@ namespace Ecommerce.Controllers
             }
         }
 
-        //get category
+        //get category and show in product page
         [HttpGet]
         public JsonResult Getcatdata()
         {
@@ -85,10 +86,7 @@ namespace Ecommerce.Controllers
             pro.imgpathdes.SaveAs(Path.Combine(Server.MapPath("~/images/productimages/"), fileNamedes));
             pro.imgpath.SaveAs(Path.Combine(Server.MapPath("~/images/productimages/"), fileName));
 
-
-
-
-
+            
             obj.Products.Add(pro);
             obj.SaveChanges();
             // return Json(new { success = true, message = "Product   Data Save" }, JsonRequestBehavior.AllowGet);
@@ -204,36 +202,93 @@ namespace Ecommerce.Controllers
 
         }
 
+        //get orders info from ordermainn table for datatable
+        public JsonResult viewOrders()
+        {
+            List<Order> vieworder = obj.Database.SqlQuery<Order>("select OrderID, OrderDate, Status, CustomerName,CustomerPhone from ordermain").ToList();
 
+            return Json(new { data = vieworder.ToList() }, JsonRequestBehavior.AllowGet);
+        }
+
+        //get orders main info for detail page
+        public JsonResult viewOrdermain(string orderID)
+        {
+            List<Order> vieworder = obj.Database.SqlQuery<Order>("select OrderID, OrderDate, Status, CustomerName,CustomerPhone,CustomerAddress,CustomerCity from ordermain where OrderID='"+ orderID + "'").ToList();
+
+            return Json(vieworder.ToList(), JsonRequestBehavior.AllowGet);
+        }
+
+        //get orderdetails info for detail page
+        public JsonResult viewOrderDetail(string orderID)
+        {
+            List<OrderDetails> orderdetail = obj.Database.SqlQuery<OrderDetails>("select orderdetail.pid, product.pname, qty, orderdetail.price, Bill from orderdetail, product where orderdetail.pid = product.pid and orderdetail.OrderID = '" + orderID + "'").ToList();
+
+            return Json(new { data = orderdetail.ToList() }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult ChangeStatus(string orderID, string Status)
+        {
+            int orderid = Convert.ToInt32(orderID);
+            ordermain om = obj.ordermains.Where(o => o.OrderID == orderid).FirstOrDefault();
+
+            om.Status = Status;
+            obj.Entry(om).State = EntityState.Modified;
+            obj.SaveChanges();
+
+            return Json(new { success = true, message = "Order status update" }, JsonRequestBehavior.AllowGet);
+        }
         //views
         public ActionResult Login()
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult Login(admin adm)
         {
-            admin ad = obj.admins.Where(x => x.admin_name == adm.admin_name && x.admin_pass == adm.admin_pass).SingleOrDefault();
+            admin ad = obj.admins.Where(x => x.admin_email == adm.admin_email && x.admin_pass == adm.admin_pass).SingleOrDefault();
+
             if (ad != null)
             {
-                Session["admin_id"] = ad.admin_id.ToString();
-                Session["admin_name"] = ad.admin_name.ToString();
-                ViewBag.adminName = Session["admin_name"];
+                Session["id"] = ad.admin_id.ToString();
+                Session["email"] = ad.admin_email.ToString();
+                Session["name"] = ad.admin_name.ToString();
                 return RedirectToAction("Index");
             }
             else
             {
-
                 ViewBag.error = "Invalid Username or Password!";
             }
+
             return View();
+        }
+
+        public ActionResult LogOut()
+        {
+            FormsAuthentication.SignOut();
+            Session.Clear();
+            Session.RemoveAll();
+            Session.Abandon();
+            return RedirectToAction("Login");
         }
 
         public ActionResult Index()
         {
-            return View();
+            if(Session["id"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+           return View();
         }
 
+        public ActionResult OrderDetail(int? orderID)
+        {
+            ViewBag.orderID = orderID;
+            return View();
+            
+        }
+        
         public ActionResult FeatureView()
         {
             return View();

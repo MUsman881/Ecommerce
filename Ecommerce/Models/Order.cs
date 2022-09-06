@@ -14,5 +14,6 @@ namespace Ecommerce.Models
         public string CustomerPhone { get; set; }
         public string CustomerCity { get; set; }
         public string CustomerAddress { get; set; }
+        public string EmailAddress { get; set; }
     }
 }

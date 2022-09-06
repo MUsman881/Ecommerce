@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "ProductDetails";
+    ViewBag.Title = "Product Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -35,41 +35,32 @@
                 </div>
             </div>
             <!-- /Product main img -->
-            
             <!-- Product details -->
             <div class="col-md-7 col-xs-5">
                 <div class="product-details">
+
                     <h2 class="product-name" id="pname"></h2>
-                    
                     <div>
                         <h3 class="product-price" id="price"></h3>
                     </div>
                     <div id="desc"></div>
-                    @*<div class="product-options">
-                        <label>
-                            Size
-                            <select class="input-select">
-                                <option value="0">X</option>
-                            </select>
-                        </label>
-                        <label>
-                            Color
-                            <select class="input-select">
-                                <option value="0">Red</option>
-                            </select>
-                        </label>
-                    </div>*@<br />
+                   <br />
+
                     <div class="add-to-cart">
-                        @*<div class="qty-label">
+                        <div class="qty-label">
                             Qty
                             <div class="input-number">
-                                <input type="number" value="1">
+                                <input type="number" id="txtqty" value="1">
                                 <span class="qty-up">+</span>
                                 <span class="qty-down">-</span>
                             </div>
-                        </div>*@
-                        <button id="btn-cart" class="add-to-cart-btn my-cart-btn"  data-quantity="1"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                        </div>
+                        <br />
+
+                       <a class="btn add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</a>
+
                     </div>
+
                     <ul class="product-links">
                         <li>Share:</li>
                         <li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -81,55 +72,42 @@
 
             </div>
             <!-- /Product details -->
-          
-
-          
-                <!-- Product tab -->
-                <div class="col-md-11"  >
-                    <div id="product-tab">
-                        <!-- product tab nav -->
-                        <ul class="tab-nav">
-                            <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
-                            <li><a data-toggle="tab" href="#tab2">Details</a></li>
-                            <li><a data-toggle="tab" href="#tab3">Images</a></li>
-                        </ul>
-                        <!-- /product tab nav -->
-                        <!-- product tab content -->
-                        <div class="tab-content">
-                            <!-- tab1  -->
-                            <div id="tab1" class="tab-pane fade in active">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div id="desc1">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /tab1  -->
-                            <!-- tab2  -->
-                            <div id="tab2" class="tab-pane fade in">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div id="desc2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /tab2  -->
-                            <!-- tab3  -->
-                            <div id="tab3" class="tab-pane fade in">
-                                <div class="row">
-                                   <img id="img2" src="" alt="" />
-                                    <!-- /Review Form -->
-                                </div>
-                            </div>
-                            <!-- /tab3  -->
-                        </div>
-                        <!-- /product tab content  -->
-                    </div>
-                </div>
-                <!-- /product tab -->
             
 
-
+            <!-- Product tab -->
+            <div class="col-md-11">
+                <div id="product-tab">
+                    <!-- product tab nav -->
+                    <ul class="tab-nav">
+                        <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
+                        <li><a data-toggle="tab" href="#tab3">Images</a></li>
+                    </ul>
+                    <!-- /product tab nav -->
+                    <!-- product tab content -->
+                    <div class="tab-content">
+                        <!-- tab1  -->
+                        <div id="tab1" class="tab-pane fade in active">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="desc1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /tab1  -->
+                        <!-- tab2  -->
+                        <div id="tab3" class="tab-pane fade in">
+                            <div class="row">
+                                <img id="img2" src="" alt="" />
+                                <!-- /Review Form -->
+                            </div>
+                        </div>
+                        <!-- /tab3  -->
+                    </div>
+                    <!-- /product tab content  -->
+                </div>
+            </div>
+            <!-- /product tab -->
         </div>
 
     </div>
@@ -139,25 +117,21 @@
 
 @section scripts{
 
-    <script src="~/Scripts/jquery.mycart.js"></script>
-    <script src="~/Scripts/jquery.cookie.js"></script>
 
     <script>
 
         $(document).ready(function () {
-
-            
-
             $.ajax({
-
-                url: "/Shop/viewdetail",
+                url: "@Url.Action("viewdetail", "Shop")",
                 type: "GET",
                 data: {proid: @ViewBag.pid},
                 contentType: "application/json; charset=utf-8",
                 datatype: JSON,
                 success: function(data){
                     $(data).each(function(){
+                        
 
+                        $("#pid").html(this.pid);
                         $("#pname").html(this.pname);
                         $("#price").html(this.price);
                         $("#img1").attr("src", this.picone);
@@ -167,95 +141,37 @@
                         $("#img2").attr("src", this.pictwo);
 
                     });
-
-                    $(data).each(function(){
-
-                        $("#btn-cart").attr("data-id",@ViewBag.pid);
-                        $("#btn-cart").attr("data-name",this.pname);
-                        $("#btn-cart").attr("data-price",this.price);
-                        $("#btn-cart").attr("data-image",this.picone);
-                    });
                 },
                 error: function(data){ }
 
             });
 
-
-            var goToCartIcon= function($addToCartBtn){
-                var $carticon = $(".my-cart-icon");
-                var $image=$('<img width="30px" height="30px" src="'+ $addToCartBtn.data("image")+ '"/>').css({"position":"fixed", "z-index":"999"});
-                $addToCartBtn.prepend($image);
-                var position = $carticon.position();
-                $image.animate({
-                    top:position.top,
-                    left:position.left
-                },500,"linear", function(){
-                    $image.remove();
-                });
-            }
-
-           
-            var cproducts = [];
-
-            $(".my-cart-btn").click(function(){
-
-                var productsID = $(this).attr('data-id');
-
-                cproducts.push(productsID);
-                
-                $.cookie('CartProducts', cproducts.join('-'), {path: '/'});
-
-                alert("Product added to Cart.");
-
-                console.log(cproducts);
-            });
-
-
-            $('.my-cart-btn').myCart({
-
-                currencySymbol: 'Rs ',
-                classCartIcon: 'my-cart-icon',
-                classCartBadge: 'my-cart-badge',
-                classProductQuantity: 'my-product-quantity',
-                classProductRemove: 'my-product-remove',
-                classCheckoutCart: 'my-cart-checkout',
-                affixCartIcon: true,
-                showCheckoutModal: true,
-
-                clickOnAddToCart: function($addTocart){
-                    goToCartIcon($addTocart);
-                },
-                afterAddOnCart: function(products, totalPrice, totalQuantity) {
-                    console.log("afterAddOnCart", products, totalPrice, totalQuantity);
-                },
-                clickOnCartIcon: function($cartIcon, products, totalPrice, totalQuantity) {
-                    console.log("cart icon clicked", $cartIcon, products, totalPrice, totalQuantity);
-                },
-                
-                checkoutCart: function(products, totalPrice, totalQuantity) {
-                    var checkoutString = "Total Price: " + totalPrice + "\nTotal Quantity: " + totalQuantity;
-                    checkoutString += "\n\n id \t name \t summary \t price \t quantity \t image path";
-                    $.each(products, function(){
-                        checkoutString += ("\n " + this.id + " \t " + this.name + " \t " + this.summary + " \t " + this.price + " \t " + this.quantity + " \t " + this.image);
-                    });
-                    alert(checkoutString)
-                    console.log("checking out", products, totalPrice, totalQuantity);
-                    
-                }
-                
-
-            });
-
-            
-           
-
-
         });
 
+        $(".add-to-cart-btn").click(function(){
 
-    </script>
-    
-    
-    
-    }
+            var pid= @ViewBag.pid;
+            var qty = $("#txtqty").val();
+
+            $.ajax({
+                type: 'POST',
+                data:{proid: pid, qty:qty },
+                url:'@Url.Action("AddtoCart", "Shop")',
+                success: function(data){
+                    if (data.success) {
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        });
+                    }
+                },
+                error: function(data){
+                    console.log("fail");
+                }
+            });
+        });
+
+</script>
+
+}
 

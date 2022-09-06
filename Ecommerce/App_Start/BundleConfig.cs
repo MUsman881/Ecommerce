@@ -30,11 +30,6 @@ namespace Ecommerce
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      //slick slider css
-                      "~/Content/slick.css",
-                       "~/Content/slick-theme.css",
-                       //nouislider css
-                       "~/Content/nouislider.min.css",
                        //font awesome
                        "~/Content/font-awesome.min.css",
                        "~/Content/all.min.css",
