@@ -133,19 +133,12 @@
                                     <input type="date" name="lastdate" id="lastdate" autocomplete="off" class="form-control" required />
 
                                 </div>
-
-
-
-
-
-
-
                             </div>
 
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-1"></i>Close</button>
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-save mr-1"></i> Save changes</button>
                             </div>
                         </div>
 
@@ -194,7 +187,7 @@
 
                     {
                         "data": "pid", render: function (data) {
-                            return "<a class='btn btn-info btn-small' onclick = 'popupForm(this," + data + ")'  ><i class='fa fa-pencil '></i> Add </a> "
+                            return "<a class='btn btn-info btn-small' style='color:#fff' onclick = 'popupForm(this," + data + ")'><i class='fa fa-plus mr-1'></i> Add Sale</a> "
 
                         }, "orderable": false
                     }
@@ -228,15 +221,12 @@
                                 var aa = new Date(parseInt(data.replace('/Date(', '')));
 
                                 return aa.toDateString();
-
                             }
-
-
                         },
 
                     {
                         "data": "pid", render: function (data) {
-                                return "<a class='btn btn-info btn-small' onclick = 'popdel(this, " + data + ")'><i class='fa fa-remove '></i> Remove </a> "
+                            return "<a class='btn btn-info btn-small' style='color:#fff' onclick = 'popdel(this, " + data + ")'><i class='fa fa-times mr-1'></i> Remove </a> "
 
                         }, "orderable": false
                     }
@@ -251,10 +241,7 @@
          $("#pid").val(currentRow.find("td:eq(0)").html());
          $("#pname").val(currentRow.find("td:eq(2)").html());
 
-
          $('#exampleModal').modal('toggle');
-
-
 
      }
 

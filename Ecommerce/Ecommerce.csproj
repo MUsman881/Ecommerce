@@ -1661,6 +1661,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\jquery-ui.min.css" />
     <Content Include="Content\Login.css" />
     <Content Include="Content\nouislider.min.css" />
     <Content Include="Content\style.css" />
@@ -1813,6 +1814,7 @@
     <Content Include="Scripts\jquery-3.0.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.0.0.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -1820,6 +1822,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\jquery.zoom.min.js" />
+    <Content Include="Scripts\JsBarcode.all.min.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\mainjs.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
@@ -1898,6 +1901,7 @@
     <Content Include="Views\Shop\Checkout.cshtml" />
     <Content Include="Views\Admin\OrderDetail.cshtml" />
     <Content Include="Views\Admin\Login.cshtml" />
+    <Content Include="Views\Shop\_EmptyCart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

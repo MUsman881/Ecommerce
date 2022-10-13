@@ -139,7 +139,7 @@ namespace Ecommerce.Controllers
 
 
         //add product into feature table
-        public ActionResult Getfeature(string Proid)
+        public ActionResult Addfeature(string Proid)
         {
             if (Proid != null)
             {
@@ -170,7 +170,7 @@ namespace Ecommerce.Controllers
         }
 
 
-        //get product data from category and product table and show in table
+        //get product data from category and product table and show in sale view
         public ActionResult Getprotab()
         {
 
@@ -238,6 +238,8 @@ namespace Ecommerce.Controllers
 
             return Json(new { success = true, message = "Order status update" }, JsonRequestBehavior.AllowGet);
         }
+
+
         //views
         public ActionResult Login()
         {
@@ -251,9 +253,9 @@ namespace Ecommerce.Controllers
 
             if (ad != null)
             {
-                Session["id"] = ad.admin_id.ToString();
-                Session["email"] = ad.admin_email.ToString();
-                Session["name"] = ad.admin_name.ToString();
+                Session["admin_id"] = ad.admin_id.ToString();
+                Session["admin_email"] = ad.admin_email.ToString();
+                Session["admin_name"] = ad.admin_name.ToString();
                 return RedirectToAction("Index");
             }
             else
@@ -267,23 +269,27 @@ namespace Ecommerce.Controllers
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
-            Session.Clear();
-            Session.RemoveAll();
-            Session.Abandon();
+            Session.Remove("admin_id");
+            Session["admin_id"] =null;
             return RedirectToAction("Login");
         }
 
         public ActionResult Index()
         {
-            if(Session["id"] == null)
+            if(Session["admin_id"] == null)
             {
                 return RedirectToAction("Login");
             }
+
            return View();
         }
 
         public ActionResult OrderDetail(int? orderID)
         {
+            if (Session["admin_id"] == null)
+            {
+                return RedirectToAction("Login");
+            }
             ViewBag.orderID = orderID;
             return View();
             
@@ -291,27 +297,52 @@ namespace Ecommerce.Controllers
         
         public ActionResult FeatureView()
         {
+            if (Session["admin_id"] == null)
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
 
         public ActionResult Categoryview()
         {
+
+            if (Session["admin_id"] == null)
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
         public ActionResult Productview()
         {
+            if (Session["admin_id"] == null)
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
         public ActionResult Orderview()
         {
+            if (Session["admin_id"] == null)
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
         public ActionResult Saleview()
         {
+            if (Session["admin_id"] == null)
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
         public ActionResult Report()
         {
+            if (Session["admin_id"] == null)
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
     }

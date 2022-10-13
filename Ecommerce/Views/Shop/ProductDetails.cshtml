@@ -129,7 +129,6 @@
                 datatype: JSON,
                 success: function(data){
                     $(data).each(function(){
-                        
 
                         $("#pid").html(this.pid);
                         $("#pname").html(this.pname);
@@ -166,6 +165,7 @@
                     }
                 },
                 error: function(data){
+                    alert("Please log in to add products in your cart.");
                     console.log("fail");
                 }
             });

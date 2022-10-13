@@ -23,110 +23,65 @@
     <!-- /container -->
 </div>
 <!-- /BREADCRUMB -->
-
-
 <!-- SECTION -->
 <div class="section">
     <!-- container -->
     <div class="container">
 
 
-            <!-- row -->
-            <div class="row">
-                <!-- ASIDE -->
-                <div id="aside" class="col-md-3">
-                    <!-- aside Widget -->
-                    <div class="aside">
-                        <h3 class="aside-title">Categories</h3>
-                        <div class="checkbox-filter">
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="category-1">
-                                <label for="category-1">
+        <!-- row -->
+        <div class="row">
+            <!-- ASIDE -->
+            <div id="aside" class="col-md-3">
+                <!-- aside Widget -->
+                <div class="aside">
+                    <h3 class="aside-title">Categories</h3>
+                    <div class="checkbox-filter" id="catdata">
+                        @*<div class='input-checkbox'>
+                                <input type="checkbox" id="category">
+                                <label for="category">
                                     <span></span>
                                     Development Boards
-                                    <small>(120)</small>
                                 </label>
-                            </div>
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="category-2">
-                                <label for="category-2">
-                                    <span></span>
-                                    Basic Parts
-                                    <small>(740)</small>
-                                </label>
-                            </div>
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="category-3">
-                                <label for="category-3">
-                                    <span></span>
-                                    Sensors
-                                    <small>(1450)</small>
-                                </label>
-                            </div>
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="category-4">
-                                <label for="category-4">
-                                    <span></span>
-                                    Amplifires
-                                    <small>(578)</small>
-                                </label>
-                            </div>
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="category-5">
-                                <label for="category-5">
-                                    <span></span>
-                                    Mobiles
-                                    <small>(120)</small>
-                                </label>
-                            </div>
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="category-6">
-                                <label for="category-6">
-                                    <span></span>
-                                    Laptops
-                                    <small>(740)</small>
-                                </label>
-                            </div>
+                            </div>*@
+                    </div>
+                </div>
+                <!-- /aside Widget -->
+                <!-- aside Widget -->
+                <div class="aside">
+                    <h3 class="aside-title">Price</h3>
+                    <div class="price-filter">
+                        <div id="price-slider"></div>
+                        <div class="input-number price-min">
+                            <input id="price-min" type="number">
+                            <span class="qty-up">+</span>
+                            <span class="qty-down">-</span>
+                        </div>
+                        <span>-</span>
+                        <div class="input-number price-max">
+                            <input id="price-max" type="number">
+                            <span class="qty-up">+</span>
+                            <span class="qty-down">-</span>
                         </div>
                     </div>
-                    <!-- /aside Widget -->
-                    <!-- aside Widget -->
-                    <div class="aside">
-                        <h3 class="aside-title">Price</h3>
-                        <div class="price-filter">
-                            <div id="price-slider"></div>
-                            <div class="input-number price-min">
-                                <input id="price-min" type="number">
-                                <span class="qty-up">+</span>
-                                <span class="qty-down">-</span>
-                            </div>
-                            <span>-</span>
-                            <div class="input-number price-max">
-                                <input id="price-max" type="number">
-                                <span class="qty-up">+</span>
-                                <span class="qty-down">-</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /aside Widget -->
-
-                    <!--Product on sale-->
-                    <div class="aside">
-                        <h3 class="aside-title">Product on sale</h3>
-                        <a href="~/Home/Index#sdata">View All</a>
-                    </div>
-
+                </div>
+                <!-- /aside Widget -->
+                <!--Product on sale-->
+                <div class="aside">
+                    <h3 class="aside-title">Product on sale</h3>
+                    <a href="~/Home/Index#sdata">View All</a>
                 </div>
 
-                <div id="store" class="col-md-9">
-                    <!--Shop data-->
-                    <div class="row" id="sdata">
+            </div>
 
-                         
-                    </div>
-                    <!--/Shop data-->
+            <div id="store" class="col-md-9">
+                <!--Shop data-->
+                <div class="row" id="sdata">
 
-                    @*<div class="store-filter clearfix">
+
+                </div>
+                <!--/Shop data-->
+                @*<div class="store-filter clearfix">
                         <span class="store-qty">Showing 20-100 products</span>
                         <ul class="store-pagination">
                             <li class="active">1</li>
@@ -136,13 +91,13 @@
                             <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
                         </ul>
                     </div>*@
-                    <!-- /store bottom filter -->
-                </div>
+                <!-- /store bottom filter -->
+            </div>
             <!-- row -->
 
         </div>
     </div>
-    </div>
+</div>
 
 
 
@@ -169,17 +124,34 @@
 
                     });
                 },
-                error: function(data){ }
+                error: function (data) {
+                    console.log(data);
+                }
 
             });
 
+            $.ajax({
 
+                url: "/Shop/Getcatdata",
+                type: "Get",
+                contentType: "application/json; charset = utf-8",
+                datatype: JSON,
+                success: function (result) {
+                    $(result).each(function () {
+
+                        $("#catdata").append("<div class='input-checkbox'><input type='checkbox' id='cateid' value='" + this.catid + "'><label for='cateid'><span></span>" + this.catname + "</label></div>");
+
+                    });
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+
+            });
         });
 
-
-
     </script>
-    
-    }
+
+}
 
 

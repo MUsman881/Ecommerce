@@ -165,4 +165,23 @@
 		});
 	}
 
+	$.ajax({
+	    url: "/Admin/Getcatdata",
+	    type: "Get",
+	    contentType: "application/json; charset = utf-8",
+	    datatype: JSON,
+	    success: function (result) {
+	        $(result).each(function () {
+
+	            $("#category").append($("<option> </option>").val(this.catid).html(this.catname));
+
+	        });
+	    },
+	    error: function (data)
+	    {
+	        console.log(data);
+	    }
+	});
+
+
 })(jQuery);

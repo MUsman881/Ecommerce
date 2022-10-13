@@ -25,16 +25,15 @@ namespace Ecommerce.Controllers
 
         public ActionResult Checkout()
         {
+            if (Session["ID"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
             return View();
         }
 
         public ActionResult Cart()
         {
-            if(Session["ID"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-
             return View();
         }
 
@@ -56,7 +55,6 @@ namespace Ecommerce.Controllers
 
                 obj.Carts.Add(c);
                 obj.SaveChanges();
-
                 return Json(new { success = true, message = "Product added to Cart" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -64,6 +62,7 @@ namespace Ecommerce.Controllers
                 cart.Qty = Qty;
                 obj.Entry(cart).State = EntityState.Modified;
                 obj.SaveChanges();
+
                 return Json(new { success = true, message = "Product quantity updated" }, JsonRequestBehavior.AllowGet);
             }
 
@@ -124,6 +123,18 @@ namespace Ecommerce.Controllers
             obj.SaveChanges();
 
             return Json(new { success = true, message = "Product remove from Cart." }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult Getcatdata()
+        {
+            var catlist = (from Category in obj.Categories.AsEnumerable()
+                           select new
+                           {
+                               catid = Category.catid,
+                               catname = Category.catname,
+                           }).Distinct().ToList();
+            return Json(catlist, JsonRequestBehavior.AllowGet);
         }
     }
 }

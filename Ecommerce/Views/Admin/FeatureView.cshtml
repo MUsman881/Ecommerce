@@ -143,7 +143,7 @@
                     { "data": "pdes" },
                     {
                         "data": "pid", render: function (data) {
-                            return "<a class='btn btn-info btn-small' onclick = 'popupForm(this," + data + ")'> <i class='fa fa-pencil'></i> Add in Feature</a>"
+                            return "<a class='btn btn-info btn-small' style='color:#fff' onclick = 'popupForm(this," + data + ")'> <i class='fa fa-plus mr-1'></i> Add to Feature</a>"
                         }, "orderable":false
                     }
                 ]
@@ -166,7 +166,7 @@
                     { "data": "pname" },
                     {
                         "data": "pid", render: function (data) {
-                            return "<a class='btn btn-info btn-small' onclick = 'popdel(this," + data + ")'  ><i class='fa fa-pencil '></i> Remove Feature </a> "
+                            return "<a class='btn btn-info btn-small' style='color:#fff' onclick = 'popdel(this," + data + ")'><i class='fa fa-times mr-1'></i> Remove Feature </a> "
 
                         }, "orderable": false
                     },
@@ -212,17 +212,15 @@
             $.ajax({
 
                 type: "POST",
-                url: "/Admin/Getfeature",
+                url: "/Admin/Addfeature",
                 data: { Proid: pid },
                 success: function (data) {
                     if (data.success) {
-
                         $.notify(data.message, {
                             globalPosition: "top center",
                             className: "success"
                             
                         });
-
                         DataTable.ajax.reload();
                         $(e).closest("tr").remove().draw();
                     }

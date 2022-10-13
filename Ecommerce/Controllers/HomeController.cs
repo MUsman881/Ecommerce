@@ -27,6 +27,18 @@ namespace Ecommerce.Controllers
 
         public ActionResult Index()
         {
+            int userid = Convert.ToInt32(Session["ID"]);
+            List<Cart> cart = obj.Carts.Where(c => c.ID == userid).ToList();
+
+            if (cart != null)
+            {
+                Session["cartitems"] = cart.Count();
+            }
+            else
+            {
+                Session["cartitems"] = null;
+            }
+
             return View();
         }
 

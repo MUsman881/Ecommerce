@@ -15,7 +15,7 @@ namespace Ecommerce.Controllers
         [HttpPost]
         public ActionResult ProcessOrder(Order oc)
         {
-            string unid = DateTime.Now.ToString("hhmmssff");
+            string orderid = DateTime.Now.ToString("hhmmssff");
             string date = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt");
             int userID = Convert.ToInt32(Session["ID"]);
             
@@ -24,7 +24,7 @@ namespace Ecommerce.Controllers
             //1. save the order in Order main table
             ordermain om = new ordermain()
             {
-                OrderID = Convert.ToInt32(unid),
+                OrderID = Convert.ToInt32(orderid),
                 OrderDate = Convert.ToDateTime(date),
                 Status = "processing",
                 CustomerName = oc.CustomerName,

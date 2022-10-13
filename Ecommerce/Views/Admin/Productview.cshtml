@@ -30,7 +30,7 @@
         <div class="card-header">
             <i class="fas fa-table"></i>
             Product Details
-            <button type="button" id="btnsave" class="btn btn-info pull-right fa fa-plus" data-toggle="modal" data-target="#exampleModal">
+            <button type="button" id="btnsave" class="btn btn-info pull-right fa fa-plus mr-1" data-toggle="modal" data-target="#exampleModal">
                 Add New
             </button>
 
@@ -46,8 +46,7 @@
                             <th style="width:25%; text-align:left">Name</th>
                             <th style="width:10%"> Category</th>
                             <th style="width:5%"> Price</th>
-                            <th style="width:5%;text-align:right ">Stock</th>
-                            <th style="width:35%; text-align:left">Description </th>
+                            <th style="width:40%; text-align:left">Description </th>
                             <th style="width:5%; text-align:right">Action</th>
 
                         </tr>
@@ -72,7 +71,9 @@
 
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Add New Product</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                Add New Product
+                                </h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -91,9 +92,8 @@
                                 </div>
                                 <div class="form-group ">
                                     <input type="hidden" id="catid" name="catid" />
-                                    <select id="catidd" name="catidd" autocomplete="off" class="form-control">
-                                        <option value="0">Select Category</option>
-
+                                    <select id="catidd" name="catidd" class="form-control">
+                                        
 
                                     </select>
 
@@ -101,10 +101,6 @@
                                 <div class="form-group ">
 
                                     <input type="text" name="price" id="price" autocomplete="off" class="form-control" placeholder="Enter Product Price" required />
-
-                                </div>
-                                <div class="form-group ">
-                                    <input type="hidden" name="stock" id="stock" value="0" />
 
                                 </div>
 
@@ -128,8 +124,8 @@
 
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-1"></i>Close</button>
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-save mr-1"></i> Save changes</button>
                             </div>
                         </div>
 
@@ -175,11 +171,10 @@
                     { "data": "pname" },
                     { "data": "catname" },
                     { "data": "price" },
-                    { "data": "stock" },
                     { "data": "pdes" },
                     {
                         "data": "pid", render: function (data) {
-                            return "<a class='btn btn-info btn-small' onclick='popupForm(this, " + data + ")'> <i class='fa fa-pencil'></i> Edit </a>"
+                            return "<a class='btn btn-info btn-small' style='color:#fff;' onclick='popupForm(this, " + data + ")'> <i class='fa fa-pencil-alt mr-1'></i> Edit </a>"
                         }, "orderable":false
                     }
 
@@ -196,16 +191,13 @@
                 success: function (result) {
                     $(result).each(function () {
 
-                        $("#catidd").append($("<option></option>").val(this.catid).html(this.catname));
+                        $("#catidd").append($("<option>/option>").val(this.catid).html(this.catname));
 
                         });
-
                     $('#catidd').editableSelect().on('Select.editable-Select', function (e, li) {
 
                         $('#catid').val(li.val());
                     });
-
-
                 },
                 error: function(data){ }
                 
@@ -214,10 +206,22 @@
 
         });
 
+        function popupForm(e) {
 
-        
+            var currentRow = $(e).closest("tr");
+
+            $("#pid").val(currentRow.find("td:eq(0)").html());
+            $("#imgpath").attr("src", currentRow.find("td:eq(1)").html());
+            $("#pname").val(currentRow.find("td:eq(2)").html());
+            $("#catidd").val(currentRow.find("td:eq(3)").html());
+            $("#price").val(currentRow.find("td:eq(4)").html());
+            $("#pdes").val(currentRow.find("td:eq(5)").html());
+
+            $('#exampleModal').modal('toggle');
 
 
+
+        }
 
         function SubmitForm(form) {
             $.ajax({
